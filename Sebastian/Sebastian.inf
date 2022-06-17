@@ -1,0 +1,66 @@
+;
+; Sebastian.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318}
+Provider=%ManufacturerName%
+DriverVer=
+CatalogFile=Sebastian.cat
+PnpLockDown=1
+
+[DestinationDirs]
+DefaultDestDir = 12
+CoInstCopyFilesSection = 11
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+Sebastian.sys = 1
+SebastianCoInstaller.dll = 1
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%DeviceDesc%=Sebastian_Device, Root\Sebastian
+
+[Sebastian_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+Sebastian.sys
+
+[DeviceInstall32]
+AddDevice = Root\Sebastian,,Sebastian_RootDevice_Inst
+
+[Sebastian_RootDevice_Inst]
+HardwareIds = Root\Sebastian
+
+[Sebastian_Device.NT.Services]
+AddService = Sebastian,2,Sebastian_Service_Inst
+
+[Sebastian_Service_Inst]
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 1               ; SERVICE_SYSTEM_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\Sebastian.sys
+
+[Sebastian_Device.NT.CoInstallers]
+CopyFiles=CoInstCopyFilesSection
+AddReg=Sebastian_Device.NT.CoInstallers.reg
+
+[CoInstCopyFilesSection]
+SebastianCoInstaller.dll
+
+[Sebastian_Device.NT.CoInstallers.reg]
+HKR,,CoInstallers32,0x00010000,"SebastianCoInstaller.dll,CoDeviceInstall"
+
+[Strings]
+ManufacturerName="Electron Dance, Inc."
+ClassName=""
+DiskName="Sebastian Source Disk"
+DeviceDesc="Sebastian Device"
